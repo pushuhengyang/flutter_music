@@ -17,3 +17,20 @@ class ColorTools {
         (hex & 0xFF0000) >> 16, (hex & 0x00FF00) >> 8, (hex & 0x0000FF) >> 0, alpha);
   }
 }
+
+///定义常用的一些颜色
+///
+Color NormThemColor = ColorTools.hexColor("D52A2A");
+
+Color NormTitleColor = ColorTools.hexColor("333333");
+
+Color NormSubTitLeColor = ColorTools.hexColor("999999");
+
+Color NormBackGroundColor = ColorTools.hexColor("ffffff");
+
+Color NormSectionColor = ColorTools.hexColor("e8e8e8");
+
+///常用的一些 字体样式
+TextStyle NormTitleStyle = TextStyle(color: NormTitleColor, fontSize: 16);
+
+TextStyle NormSubStyle = TextStyle(color: NormSubTitLeColor, fontSize: 12);

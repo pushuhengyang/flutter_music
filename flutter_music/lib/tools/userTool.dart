@@ -10,7 +10,7 @@ class UserTool {
     if (_userModel != null) return _userModel;
     SharedPreferences spTool = await SharedPreferences.getInstance();
     String jsonStr = spTool.get('USER_INFO_ROOT');
-    Map<String, dynamic> model = JsonUtil.getObj(jsonStr, (v) => null);
+    Map<String, dynamic> model = JsonUtil.getObj(jsonStr, (v) => v);
     if (model != null) {
       _userModel = UserModel.fromJson(model);
     }

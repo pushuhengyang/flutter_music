@@ -29,4 +29,36 @@ class VEmptyView extends StatelessWidget {
   }
 }
 
+/// 一个有border 的控件
+class CustomBorderWidget extends StatelessWidget {
+  final double borderWidth;
+  final Color borderColor;
+  final Widget child;
+  final double radius;
+  final double width;
+  final double height;
+  final AlignmentGeometry alignment;
 
+  CustomBorderWidget(
+      {this.borderColor = Colors.grey,
+      this.borderWidth = 1,
+      this.child,
+      this.radius = 5,
+      this.width,
+      this.height,
+      this.alignment = Alignment.center});
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      alignment: alignment,
+      width: width,
+      height: height,
+      child: child,
+      decoration: BoxDecoration(
+          borderRadius: BorderRadius.circular(radius),
+          border:
+              Border.fromBorderSide(BorderSide(width: borderWidth, color: borderColor))),
+    );
+  }
+}

@@ -1,23 +1,38 @@
 class UserModel {
+  int code;
   Account account;
   String token;
   String cookie;
   Profile profile;
-  Bindings bindings;
+  List<Bindings> bindings;
 
   UserModel.fromJson(Map<String, dynamic> json) {
-    account = Account.fromJson(json["account"]);
-    profile = Profile.fromJson(json["profile"]);
+    code = json["code"];
+    if (json["account"] != null) {
+      account = Account.fromJson(json["account"]);
+    }
+    if (json["profile"] != null) {
+      profile = Profile.fromJson(json["profile"]);
+    }
     token = json["token"];
     cookie = json["cookie"];
-    bindings = Bindings.fromJson(json["bindings"]);
+    if (json["bindings"] != null) {
+      List bind = json["bindings"];
+      bindings = [];
+      bind.forEach((element) {
+        bindings.add(Bindings.fromJson(element));
+      });
+    }
   }
 
   Map<String, dynamic> toJson() {
     Map<String, dynamic> json = Map();
+    json["code"] = code;
     json["account"] = account.toJson();
     json["profile"] = profile.toJson();
-    json["bindings"] = bindings.toJson();
+    if (this.bindings != null) {
+      json['bindings'] = bindings.map((v) => v.toJson()).toList();
+    }
     json["token"] = token;
     json["cookie"] = cookie;
   }

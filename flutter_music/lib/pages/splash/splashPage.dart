@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:event_bus/event_bus.dart';
 import 'package:fluttermusic/application.dart';
+import 'package:fluttermusic/model/userModel.dart';
+import 'package:fluttermusic/route/navigation_hander.dart';
+import 'package:fluttermusic/tools/tools.dart';
 
 class SplashPage extends StatefulWidget {
   @override
@@ -26,10 +29,19 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
     _logoController.addStatusListener((status) {
       if (status == AnimationStatus.completed) {
         Future.delayed(Duration(milliseconds: 250), () {
-          AppLication.sendMessage("root_Flg", msg: 1);
+          nextJumpPage();
         });
       }
     });
+  }
+
+  void nextJumpPage() async {
+    UserModel model = await UserTool.getUserInfo();
+    if (model != null) {
+      NavigationHander.goHomePage(context);
+    } else {
+      NavigationHander.goLoginPage(context);
+    }
   }
 
   @override
@@ -44,7 +56,7 @@ class _SplashPageState extends State<SplashPage> with TickerProviderStateMixin {
           child: Hero(
             tag: "logo",
             child: Image.asset(
-              "image/icon_logo.png",
+              "images/icon_logo.png",
             ),
           ),
         ),

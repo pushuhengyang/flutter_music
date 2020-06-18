@@ -1,8 +1,11 @@
+import 'package:dio/dio.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttermusic/model/userModel.dart';
+import 'package:fluttermusic/route/navigation_hander.dart';
 import 'package:fluttermusic/tools/colorTool.dart';
 import 'package:fluttermusic/widgets/comentwidgets.dart';
-import 'package:fluttermusic/widgets/NormWidgets.dart';
+import 'package:fluttermusic/widgets/normWidgets.dart';
 import 'package:fluttermusic/application.dart';
 import 'package:fluttermusic/tools/tools.dart';
 
@@ -69,7 +72,7 @@ class _LoginView extends AnimatedWidget {
   _LoginView({@required this.animation}) : super(listenable: animation);
 
   ///点击登录
-  void loginClick() {
+  void loginClick(BuildContext context) async {
     String phone = _phoneController.text;
     String psd = _pwdController.text;
     if (phone.isEmpty) {
@@ -80,17 +83,19 @@ class _LoginView extends AnimatedWidget {
       Hub.showToast("密码不能为空！");
       return;
     }
-    NetHander.userLoginWithParms({"phone": phone, "password": psd}).then((value) {
-      if (value is Map) {
-        num code = (value as Map)["code"];
-        if (code != 200) return;
-        UserTool.saveUserInfo(value as Map);
-      }
-    });
+    Response res =
+        await NetHander.userLoginWithParms({"phone": phone, "password": psd}, context);
+    UserModel user = UserModel.fromJson(res.data);
+    if (user.code == 200) {
+      await UserTool.saveUserInfo(res.data);
+      NavigationHander.goHomePage(context);
+    } else {
+      Hub.showToast(res.statusMessage);
+    }
   }
 
   ///输入视图
-  Widget _textFildWidget() {
+  Widget _textFildWidget(BuildContext context) {
     return Container(
       child: Column(
         children: <Widget>[
@@ -130,7 +135,7 @@ class _LoginView extends AnimatedWidget {
                     style: TextStyle(color: Colors.white, fontSize: 20),
                   ),
                   borderRadius: BorderRadius.all(Radius.circular(26)),
-                  onPressed: loginClick))
+                  onPressed: () => loginClick(context)))
         ],
       ),
     );
@@ -160,7 +165,7 @@ class _LoginView extends AnimatedWidget {
               textAlign: TextAlign.left,
             ),
             VEmptyView(30),
-            _textFildWidget(),
+            _textFildWidget(context),
           ],
         ),
       ),
